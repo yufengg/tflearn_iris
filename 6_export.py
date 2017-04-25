@@ -6,6 +6,7 @@ import numpy as np
 
 import tensorflow as tf
 from tensorflow.contrib.learn.python.learn.datasets import base
+from tensorflow.contrib.learn.python.learn.utils import input_fn_utils
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -57,5 +58,27 @@ Ys = classifier.predict(input_fn=predict_fn)
 for y in Ys:
   print('Predictions: {}'.format(str(y)))
 
+# export the model
+def serving_input_fn():
+  feature_placeholders = {
+    "flower_features": tf.placeholder(tf.float32, shape=[None, 4])
+  }
+  # DNNClassifier expects rank 2 Tensors, but inputs should be
+  # rank 1, so that we can provide scalars to the server
+  features = {
+      key: tf.expand_dims(tensor, -1)
+      for key, tensor in feature_placeholders.items()
+  }
+  
+  return input_fn_utils.InputFnOps(
+      features=features, # input into graph
+      labels=None,
+      default_inputs=feature_placeholders # tensor input converted from request 
+  )
 
+export_folder = classifier.export_savedmodel(
+    export_dir_base = model_dir + '/export',
+    input_fn=serving_input_fn
+)
+print('model exported successfully to {}'.format(export_folder))
 
