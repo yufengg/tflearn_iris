@@ -3,6 +3,8 @@ from __future__ import division
 from __future__ import print_function
 
 import numpy as np
+import time
+import argparse
 
 import tensorflow as tf
 from tensorflow.contrib.learn.python.learn.datasets import base
@@ -11,9 +13,25 @@ from tensorflow.contrib.learn.python.learn.utils import input_fn_utils
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
+parser = argparse.ArgumentParser()
+
+parser.add_argument(
+    '--job-dir',
+    help='GCS location to write checkpoints and export models',
+    required=False
+)
+args = parser.parse_args()
+job_dir = args.job_dir
+
 # Data sets
-IRIS_TRAINING = "iris_training.csv"
-IRIS_TEST = "iris_test.csv"
+IRIS_TRAINING_FILE = "iris_training.csv"
+IRIS_TEST_FILE = "iris_test.csv"
+gcs_folder = 'https://storage.googleapis.com/dataset-uploader/iris/'
+IRIS_TRAINING = base.maybe_download(
+    IRIS_TRAINING_FILE, '.', gcs_folder + IRIS_TRAINING_FILE)
+IRIS_TEST = base.maybe_download(
+    IRIS_TEST_FILE, '.', gcs_folder + IRIS_TEST_FILE)
+
 
 # Load datasets.
 training_set = base.load_csv_with_header(filename=IRIS_TRAINING,
@@ -27,7 +45,7 @@ test_set = base.load_csv_with_header(filename=IRIS_TEST,
 feature_columns = [tf.contrib.layers.real_valued_column("flower_features", dimension=4)]
 
 # Build 3 layer DNN with 10, 20, 10 units respectively.
-model_dir="/tmp/iris_model"
+model_dir = job_dir + 'models/iris_model_' + str(int(time.time()))
 classifier = tf.contrib.learn.DNNClassifier(feature_columns=feature_columns,
                                             hidden_units=[10, 20, 10],
                                             n_classes=3,
