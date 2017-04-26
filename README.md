@@ -1,9 +1,14 @@
 # tflearn_iris
 Steps for the iris codelab using tf.learn, with some adjustments and cloud goodness.
 
-From https://www.tensorflow.org/get_started/tflearn
+Inspired by https://www.tensorflow.org/get_started/tflearn
 
-Guide at bit.ly/tf-iris-codelab
+Guide at https://bit.ly/tf-iris-codelab
 
-Be sure to install TensorFlow before starting :) 
+Notable differences include: 
+* step by step code
+* Exporting the inference graph
+* Training and serving in the cloud
+
+Be sure to install TensorFlow before starting :) You'll want to be on Python 2.7 since that's what gcloud requires.
 https://www.tensorflow.org/install/
