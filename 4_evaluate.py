@@ -32,7 +32,7 @@ classifier = tf.contrib.learn.DNNClassifier(feature_columns=feature_columns,
                                             model_dir=model_dir)
 
 # Fit model.
-def input_fn(dataset): 
+def input_fn(dataset):
   def _fn():
     features = {"flower_features": tf.constant(dataset.data)}
     label = tf.constant(dataset.target)

@@ -33,7 +33,7 @@ classifier = tf.contrib.learn.DNNClassifier(feature_columns=feature_columns,
                                             model_dir=model_dir)
 
 # Fit model.
-def input_fn(dataset): 
+def input_fn(dataset):
   def _fn():
     features = {"flower_features": tf.constant(dataset.data)}
     label = tf.constant(dataset.target)
@@ -52,7 +52,7 @@ print('\nAccuracy: {0:f}'.format(accuracy_score))
 def predict_fn():
   new_samples = np.array(
     [[6.4, 3.2, 4.5, 1.5], [5.8, 3.1, 5.0, 1.7]], dtype=float)
-    return {"flower_features": new_samples}
+  return {"flower_features": new_samples}
 
 Ys = classifier.predict(input_fn=predict_fn)
 for y in Ys:
@@ -69,11 +69,11 @@ def serving_input_fn():
       key: tf.expand_dims(tensor, -1)
       for key, tensor in feature_placeholders.items()
   }
-  
+
   return input_fn_utils.InputFnOps(
       features=features, # input into graph
       labels=None,
-      default_inputs=feature_placeholders # tensor input converted from request 
+      default_inputs=feature_placeholders # tensor input converted from request
   )
 
 export_folder = classifier.export_savedmodel(
