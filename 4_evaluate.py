@@ -27,7 +27,7 @@ feature_columns = [tf.contrib.layers.real_valued_column("flower_features", dimen
 # Build 3 layer DNN with 10, 20, 10 units respectively.
 model_dir="/tmp/iris_model"
 classifier = tf.contrib.learn.DNNClassifier(feature_columns=feature_columns,
-                                            hidden_units=[10, 20, 10],
+                                            hidden_units=[30, 20, 10],
                                             n_classes=3,
                                             model_dir=model_dir)
 
